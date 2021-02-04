@@ -7,9 +7,8 @@ router.post('/register', Controller.register)
 router.post('/login', Controller.login)
 router.use(authenticate)
 
-router.get('/dashboard', (req, res)=>{
-    res.send('test masuk ga???')
-})
+
+router.get('/dashboard', Controller.dashboard)
 
 
 module.exports = router
