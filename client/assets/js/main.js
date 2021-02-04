@@ -1,6 +1,6 @@
 const serverUrl = `http://localhost:8000/`;
 
-// HANDLE LOGIN
+// ================ HANDLE LOGIN ================
 
 $("#btn-login").click((event) => {
   event.preventDefault();
@@ -21,39 +21,115 @@ const handleLogin = (email, password) => {
       auth();
     })
     .fail((error) => {
-      $("#error-login").text(error.responseJSON.errors);
+      $("#error-login").text(error.responseJSON.error);
     })
     .always((_) => {
-      $("#login-area").trigger("reset");
+      $("#login-email").val("");
+      $("#login-password").val("");
     });
 };
 
-// END HANDLE LOGIN
+$("#btn-register-inlogin").click((event) => {
+  event.preventDefault();
+  $("#login-email").val("");
+  $("#login-password").val("");
+  $("#register-area").show();
+  $("#login-area").hide();
+});
+
+// ============ END HANDLE LOGIN ================
+
+// ================ HANDLE REGISTER ================
+$("#btn-register").click((event) => {
+  event.preventDefault();
+  const firstName = $("#register-first-name").val();
+  const lastName = $("#register-last-name").val();
+  const email = $("#register-email").val();
+  const password = $("#register-password").val();
+
+  handleRegister(firstName, lastName, email, password);
+});
+
+const handleRegister = (firstName, lastName, email, password) => {
+  $.ajax({
+    method: "POST",
+    url: `${serverUrl}register`,
+    data: { firstName, lastName, email, password },
+  })
+    .done((response) => {
+      $("#succes-register").text("Account succesfully created");
+    })
+    .fail((err) => {
+      $("#error-register").text(err.responseJSON.error);
+    })
+    .always((_) => {
+      $("#register-first-name").val("");
+      $("#register-last-name").val("");
+      $("#register-email").val("");
+      $("#register-password").val("");
+    });
+};
+
+$("#btn-login-inregister").click((event) => {
+  event.preventDefault();
+  $("#register-first-name").val("");
+  $("#register-last-name").val("");
+  $("#register-email").val("");
+  $("#register-password").val("");
+  $("#register-area").hide();
+  $("#login-area").show();
+});
+
+//  ================ END HANDLE REGISTER ================
 
 // HANDLE AUTH
 const auth = () => {
-  if (localStorage) {
+  if (localStorage.access_token) {
+    console.log("aaa");
     $("#login-area").hide();
+    $("#register-area").hide();
+
+    // NAVBAR
+    $("#navbar-home").show();
+    $("#navbar-logout").show();
+    $("#navbar-login").hide();
+    $("#navbar-register").hide();
   } else {
-    $("#login-area").show();
+    // $("#login-area").show();
+    console.log("aaaaaa");
+    //NAVBAR
+    $("#navbar-home").hide();
+    $("#navbar-logout").hide();
+    $("#navbar-login").show();
+    $("#navbar-register").show();
   }
 };
 
-$("#navbar-logout").on("click", (event) => {
-  (function getLocation() {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(showPosition);
-    } else {
-      console.log(`geolocation is not supported`)
-    }
-  })()
-  
-  function showPosition(position) {
-    console.log("latitude:", position.coords.latitude)
-    console.log("longitude:", position.coords.longitude)
-  }
-})
-
 //END HANDLE AUTH
 
+// HANDLE NAVBAR
+$("#navbar-logout").click((event) => {
+  event.preventDefault();
+  localStorage.clear();
+  auth();
+});
 
+$("#navbar-register").click((event) => {
+  event.preventDefault();
+  $("#register-area").show();
+  $("#login-area").hide();
+});
+
+$("#navbar-login").click((event) => {
+  event.preventDefault();
+  $("#register-area").hide();
+  $("#login-area").show();
+});
+
+// END HANDLE NAVBAR
+
+$(document).ready(() => {
+  $("#register-area").hide();
+  $("#login-area").hide();
+  auth();
+});
