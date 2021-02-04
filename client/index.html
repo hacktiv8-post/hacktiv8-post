@@ -12,15 +12,15 @@
       integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1"
       crossorigin="anonymous"
     />
-    <link rel="preconnect" href="https://fonts.gstatic.com" />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Roboto&display=swap"
-      rel="stylesheet"
-    />
-    <link rel="stylesheet" href="./assets/css/main.css" type="text/css" />
-    <link rel="stylesheet" href="./assets/css/navbar.css" type="text/css" />
-    <link rel="stylesheet" href="./assets/css/login.css" type="text/css" />
-    <link rel="stylesheet" href="./assets/css/register.css" type="text/css" />
+
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./assets/css/main.css" type="text/css">
+    <link rel="stylesheet" href="./assets/css/navbar.css" type="text/css">
+    <link rel="stylesheet" href="./assets/css/login.css" type="text/css">
+    <link rel="stylesheet" href="./assets/css/register.css" type="text/css">
+    <link rel="stylesheet" href="./assets/css/dashboard.css" type="text/css">
+
     <title>Hacktiv8 Post</title>
   </head>
   <body>
@@ -34,7 +34,8 @@
       </section>
 
       <!-- Navbar (isi home, login, register)-->
-      <div id="navbar">
+
+      <div id="navbar-area">
         <nav class="navbar navbar-expand-lg navbar-light">
           <div class="container-fluid">
             <a class="navbar-brand" id="home">Home</a>
@@ -109,7 +110,57 @@
 
       <!-- dashboard (weather, news, covid19)-->
 
-      <!-- weather -->
+      <div id="dashboard-area">
+        <h1>Hacktiv8 Post</h1>
+        <div class="container" id="dashboard-container">
+          
+          <aside>
+
+            <!-- weather -->
+            <div class="container" id="weather-area">
+              <h1>ini weather</h1>
+            </div>
+
+            <div class="separator"></div>
+
+            <!-- covid19 -->
+            <div class="container" id="covid19-area">
+              <div class="card-covid19">
+                <h1>indonesia</h1>
+                <p>confirmed</p>
+                <p>deaths</p>
+                <p>recovered</p>
+                <p>active</p>
+                <p>date</p>
+              </div>
+            </div>
+          </aside>
+            <!-- news -->
+            <div class="container" id="news-area">
+              <div class="cards">
+                <div class="card">
+                  <img src="https://img.inews.co.id/media/600/files/inews_new/2021/02/04/PlayStation5.png">
+                  <div class="detail">
+                    <h5>Sony Jual 4,5 Juta Unit PlayStation 5 di Tahun Lalu - iNews</h5>
+                    <p>Dalam sebuah publikasi, Sony mengungkapkan telah menjual 4,5 juta unit konsol PlayStation 5 ke seluruh dunia tahun lalu.</p>
+                    <a href="https://www.inews.id/techno/elektronik/sony-jual-45-juta-unit-playstation-5-di-tahun-lalu">go to . . .</a>
+                    <p>posted at 2021-02-04T12:09:00Z</p>
+                  </div>
+                </div>
+
+                <div class="card">
+                  <img src="https://cdn.myanimelist.net/images/anime/1613/102576.jpg">
+                  <div class="detail">
+                    <h5>Sony Jual 4,5 Juta Unit PlayStation 5 di Tahun Lalu - iNews</h5>
+                    <p>Dalam sebuah publikasi, Sony mengungkapkan telah menjual 4,5 juta unit konsol PlayStation 5 ke seluruh dunia tahun lalu.</p>
+                    <p>2021-02-04T12:09:00Z</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+        </div>
+      </div>
+
 
       <!-- news -->
 
