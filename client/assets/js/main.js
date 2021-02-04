@@ -39,4 +39,21 @@ const auth = () => {
   }
 };
 
+$("#navbar-logout").on("click", (event) => {
+  (function getLocation() {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(showPosition);
+    } else {
+      console.log(`geolocation is not supported`)
+    }
+  })()
+  
+  function showPosition(position) {
+    console.log("latitude:", position.coords.latitude)
+    console.log("longitude:", position.coords.longitude)
+  }
+})
+
 //END HANDLE AUTH
+
+
