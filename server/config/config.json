@@ -1,9 +1,9 @@
 {
   "development": {
-    "username": "postgres",
+    "username": "ayudyatriastika",
     "password": "postgres",
     "database": "hacktiv8-post",
-    "host": "127.0.0.1",
+    "host": "localhost",
     "dialect": "postgres"
   },
   "test": {
