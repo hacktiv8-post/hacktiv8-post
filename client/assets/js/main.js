@@ -2,6 +2,12 @@ const serverUrl = `http://localhost:8000/`;
 
 // ================ HANDLE LOGIN ================
 
+$(document).ready(() => {
+  // $("#register-area").hide();
+  // $("#login-area").hide();
+  auth();
+});
+
 $("#btn-login").click((event) => {
   event.preventDefault();
   const email = $("#login-email").val();
@@ -85,7 +91,6 @@ $("#btn-login-inregister").click((event) => {
 // HANDLE AUTH
 const auth = () => {
   if (localStorage.access_token) {
-    console.log("aaa");
     $("#login-area").hide();
     $("#register-area").hide();
 
@@ -96,7 +101,6 @@ const auth = () => {
     $("#navbar-register").hide();
   } else {
     // $("#login-area").show();
-    console.log("aaaaaa");
     //NAVBAR
     $("#navbar-home").hide();
     $("#navbar-logout").hide();
@@ -118,18 +122,16 @@ $("#navbar-register").click((event) => {
   event.preventDefault();
   $("#register-area").show();
   $("#login-area").hide();
+  $("#dashboard-area").hide();
 });
 
 $("#navbar-login").click((event) => {
   event.preventDefault();
   $("#register-area").hide();
   $("#login-area").show();
+  $("#dashboard-area").hide();
 });
 
 // END HANDLE NAVBAR
 
-$(document).ready(() => {
-  $("#register-area").hide();
-  $("#login-area").hide();
-  auth();
-});
+
