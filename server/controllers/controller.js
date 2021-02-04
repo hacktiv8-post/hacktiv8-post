@@ -51,18 +51,18 @@ class Controller {
     }
 
     static dashboard(req, res, next) {
-        
+
         let articlesData = []
-        let weatherInfos = {}
+        let weather = {}
         let country = "id"
         let newsUrl = `https://newsapi.org/v2/top-headlines?country=${country}&apiKey=${process.env.NEWS_API_KEY}`
-        let latt = 40.7831
-        let long = -73.9712
+        let latt = req.body.latitude
+        let long = req.body.longitude
         let weatherStackUrl = `http://api.weatherstack.com/current?access_key=${process.env.WEATHERSTACK_KEY}&query=${latt},${long}`
-        
+
         axios.get(newsUrl)
             .then(response => {
-                
+
                 let articles = response.data.articles
                 articlesData = articles.map(e => {
                     const source = e.source.name
@@ -71,27 +71,46 @@ class Controller {
                     const url = e.url
                     const urlToImage = e.urlToImage
                     const publishedAt = e.publishedAt
-                    return {source, title, description, url, urlToImage, publishedAt}
+                    return { source, title, description, url, urlToImage, publishedAt }
                 })
 
                 return axios.get(weatherStackUrl)
             })
             .then(response => {
-                weatherInfos = response.data
+                let weatherInfos = response.data
                 const temperature = weatherInfos.current.temperature
                 const weather_icons = weatherInfos.current.weather_icons
                 const weather_descriptions = weatherInfos.current.weather_descriptions
-                const weather = {temperature, weather_icons, weather_descriptions}
+                weather = { temperature, weather_icons, weather_descriptions }
                 console.log(weather)
-                res.status(200).json({articlesData, weather})
+                return axios({
+                    method: "get",
+                    url: `https://api.covid19api.com/live/country/indonesia`
+                })
 
+
+            })
+            .then(response => {
+                let temp = response.data[response.data.length - 1];
+
+                const data = {
+                    country: temp.Country,
+                    confirmed: temp.Confirmed,
+                    deaths: temp.Deaths,
+                    recovered: temp.Recovered,
+                    active: temp.Active,
+                    date: temp.Date,
+                }
+                res.status(200).json({ articlesData, weather, dataCovid: data })
             })
             .catch(err => {
                 res.status(401).json(err)
             })
+
     }
 
 
 }
 
 module.exports = Controller
+
