@@ -5,6 +5,7 @@ const { generateToken } = require('../helpers/jwt')
 class Controller {
     static register(req, res, next) {
         const { firstName, lastName, email, password } = req.body
+        
         User.create({
             firstName,
             lastName,

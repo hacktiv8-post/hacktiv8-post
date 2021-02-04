@@ -1,9 +1,15 @@
 const router = require('express').Router()
 const Controller = require('../controllers/controller')
-const ControllerApi = require('../controllers/controllerApi')
+
+const authenticate = require('../middleware/auth')
 
 router.post('/register', Controller.register)
 router.post('/login', Controller.login)
-// router.get('/dashboard', Controller.dashboard)
+router.use(authenticate)
+
+router.get('/dashboard', (req, res)=>{
+    res.send('test masuk ga???')
+})
+
 
 module.exports = router

@@ -50,6 +50,21 @@ module.exports = (sequelize, DataTypes) => {
           args: [8],
           msg: "Minimum password length is 8 characters"
         },
+        isUpperCase(password) {
+          if(!password.match(/[A-Z]/g)){
+            throw { name: "password error", message: "password must include uppercase", status:400 }
+          }
+        },
+        isLowerCase(password) {
+          if(!password.match(/[a-z]/g)){
+            throw { name: "password error", message: "password must include lowercase", status:400 }
+          }
+        },
+        isNumeric(password) {
+          if(!password.match(/[0-9]/g)){
+            throw { name: "password error", message: "password must include numeric", status:400 }
+          }
+        }
       },
     },
   }, {
