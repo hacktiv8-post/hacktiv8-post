@@ -3,7 +3,7 @@ const { checkPassword } = require('../helpers/bcrypt')
 const { generateToken } = require('../helpers/jwt')
 
 class Controller {
-    static register(req, res) {
+    static register(req, res, next) {
         const { firstName, lastName, email, password } = req.body
         User.create({
             firstName,
@@ -18,11 +18,11 @@ class Controller {
                 })
             })
             .catch(err => {
-                res.status(500).json({ msg: err.errors })
+                next(err)
             })
     }
 
-    static login(req, res) {
+    static login(req, res, next) {
         const { email, password } = req.body
         User.findOne({
             where: {
@@ -32,8 +32,7 @@ class Controller {
             .then(user => {
                 
                 if (!user || !checkPassword(password, user.password)) {
-                    
-                    throw { error: 'invalid email or password' }
+                    throw { name: 'Custom error', message: 'invalid email or password', code: 400}
                 }
                 
                 const access_token = generateToken({
@@ -45,7 +44,7 @@ class Controller {
                 res.status(200).json({access_token})
             })
             .catch(err => {
-                res.status(404).json(err)
+                next(err)
             })
     }
 
