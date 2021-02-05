@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="google-signin-client_id"
+      content="913819802138-t98momk4keugjvhiuso7etvco2u0uhdo.apps.googleusercontent.com"
+    />
+
+    <!-- Bootstrap CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1"
+      crossorigin="anonymous"
+    />
+
+    <link rel="preconnect" href="https://fonts.gstatic.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./assets/css/main.css" type="text/css" />
+    <link rel="stylesheet" href="./assets/css/navbar.css" type="text/css" />
+    <link rel="stylesheet" href="./assets/css/login.css" type="text/css" />
+    <link rel="stylesheet" href="./assets/css/register.css" type="text/css" />
+    <link rel="stylesheet" href="./assets/css/dashboard.css" type="text/css" />
+
+    <title>Hacktiv8 Post</title>
+  </head>
+  <body>
+    <div class="container">
+      <!-- Just for background -->
+
+      <section>
+        <div class="color"></div>
+        <div class="color"></div>
+        <div class="color"></div>
+      </section>
+
+      <!-- Navbar (isi home, login, register)-->
+
+      <div id="navbar-area">
+        <nav class="navbar navbar-expand-lg navbar-light">
+          <div class="container-fluid">
+            <div class="collapse navbar-collapse" id="navbarText">
+              <ul class="navbar-nav me-auto mb-2 mb-lg-0"></ul>
+              <span class="navbar-text">
+                <h4 id="navbar-login">Login</h4>
+                <h4 id="navbar-register">Register</h4>
+                <h4 id="navbar-logout" onclick="signOut();">Logout</h4>
+              </span>
+            </div>
+          </div>
+        </nav>
+      </div>
+
+      <!-- home (iklan doang) -->
+
+      <!-- Login (email password)-->
+
+      <div id="login-area">
+        <div class="center">
+          <h1>Login</h1>
+          <form>
+            <div class="login-error-message"></div>
+            <div class="txt_field">
+              <p id="error-login"></p>
+              <input type="email" id="login-email" required />
+              <label for="login-email">Email</label>
+            </div>
+            <div class="txt_field">
+              <input type="password" id="login-password" required />
+              <label for="login-password">Password</label>
+            </div>
+            <button type="submit" id="btn-login">Login</button>
+            <div class="register-link">
+              Not a member? <a id="btn-register-inlogin" href="#">Register</a>
+            </div>
+          </form>
+          <div class="g-signin2" data-onsuccess="onSignIn"></div>
+        </div>
+      </div>
+
+      <!-- Register (firstName, lastName, email, password)-->
+
+      <div id="register-area">
+        <div class="center">
+          <h1>Register</h1>
+          <form>
+            <div class="register-error-message"></div>
+            <div class="txt_field-register">
+              <input type="text" id="register-first-name" required />
+              <label for="register-first-name">First Name</label>
+            </div>
+            <div class="txt_field-register">
+              <input type="text" id="register-last-name" />
+              <label for="register-last-name">Last Name</label>
+            </div>
+            <div class="txt_field-register">
+              <input type="email" id="register-email" required />
+              <label for="register-email">Email</label>
+            </div>
+            <div class="txt_field-register">
+              <input type="password" id="register-password" required />
+              <label for="register-password">Password</label>
+            </div>
+            <button type="submit" id="btn-register">Register</button>
+            <div class="login-link">
+              <a id="btn-login-inregister" href="#">Have an account?</a>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- dashboard (weather, news, covid19)-->
+
+      <div id="dashboard-area">
+        <h1>Hacktiv8 Post</h1>
+        <div class="container" id="dashboard-container">
+          <aside>
+            <!-- weather -->
+            <!-- <div class="dashboard-greeting"></div> -->
+            <div class="container" id="weather-area"></div>
+
+            <div class="separator"></div>
+
+            <!-- covid19 -->
+            <div class="container" id="covid19-area"></div>
+          </aside>
+          <!-- news -->
+          <div class="container" id="news-area">
+            <div class="cards"></div>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- if fail -->
+      <h1 id="fail-condition"></h1>
+    </div>
+    <!-- bootstrap cdn -->
+    <!-- <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW"
+      crossorigin="anonymous"
+    ></script> -->
+    <!-- jQuery cdn -->
+    <script
+      src="https://code.jquery.com/jquery-3.5.1.min.js"
+      integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0="
+      crossorigin="anonymous"
+    ></script>
+    <script src="assets/js/main.js"></script>
+    <!-- Option 2: Separate Popper and Bootstrap JS -->
+    <!--
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js" integrity="sha384-q2kxQ16AaE6UbzuKqyBE9/u/KzioAlnx2maXQHiDX9d4/zp8Ok3f+M7DPm+Ib6IU" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.min.js" integrity="sha384-pQQkAEnwaBkjpqZ8RU1fF1AKtTcHJwFl3pblpTlHXybJjHpMYo79HY3hIi4NKxyj" crossorigin="anonymous"></script>
+    -->
+
+    <!-- GOOGLE  -->
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+  </body>
+</html>
