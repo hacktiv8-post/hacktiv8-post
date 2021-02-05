@@ -7,7 +7,6 @@ const { OAuth2Client } = require("google-auth-library");
 class Controller {
   static register(req, res, next) {
     const { firstName, lastName, email, password } = req.body;
-    // let errors = [];
 
     User.create({
       firstName,

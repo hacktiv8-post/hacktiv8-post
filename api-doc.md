@@ -1,6 +1,6 @@
 1. https://newsapi.org/ => news api
 2. https://covid19api.com/ => covid19
-3. https://www.metaweather.com/api/ => weather
+3. http://api.weatherstack.com/ => weather
 
 <h2>Table Database</h2>
 <h3> Users </h3>
