@@ -4,7 +4,7 @@
 
 <h2>Table Database</h2>
 <h3> Users </h3>
-1. firstName => not null, not empty
+1. firstName => not null
 2. lastName
 3. email => not null, unique (isEmail, notEmpty)
 4. password => not null (isLowerCase, isUpperCase, isNumeric, len[8, 255])
@@ -18,7 +18,7 @@
   body: `{ email, password }`
 
 - **RESPONSE** <br>
-  `200` : `{ access_token, fullName }` <br>
+  `200` : `{ access_token }` <br>
   `400` : `{ errors: ["please insert email", "please insert password"] }` <br>
   `400` : `{ errors: "invalid email or password" }` <br>
   `500` : `{ errors: "internal server errors" }`

@@ -1,8 +1,0 @@
-0. homepage + navbar login register
-1. form login
-2. form register
-3. dashboard => {
-  1. fetch weather
-  2. fetch covid19
-  3. fetch news
-}

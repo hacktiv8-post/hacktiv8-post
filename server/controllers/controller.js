@@ -49,16 +49,9 @@ class Controller {
     })
       .then((user) => {
         const errors = [];
-        if (!email) {
-          errors.push("please insert email");
-        }
-        if (!password) {
-          errors.push("please insert password");
-        }
-        if (errors.length !== 0) {
-          throw { name: "Many custom error", message: errors, code: 400 };
-        }
-
+        if (!email) { errors.push("please insert email") }
+        if (!password) { errors.push("please insert password") }
+        if (errors.length !== 0) { throw { name: "Many custom error", message: errors, code: 400 } }
         if (!user || !checkPassword(password, user.password)) {
           throw {
             name: "Custom error",
@@ -73,7 +66,8 @@ class Controller {
           email: user.email,
         });
 
-        res.status(200).json({ access_token });
+        let fullName = `${user.firstName} ${user.lastName}`
+        res.status(200).json({ access_token, fullName });
       })
       .catch((err) => {
         next(err);
@@ -103,7 +97,6 @@ class Controller {
           return { source, title, description, url, urlToImage, publishedAt };
         });
 
-        console.log(articlesData);
         return axios.get(weatherStackUrl);
       })
       .then((response) => {

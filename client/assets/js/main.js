@@ -50,19 +50,25 @@ function getDashboard() {
         },
       })
         .done(response => {
-          $("#dashboard-container aside").prepend(`
-            <h2 id="dashboard-greeting">Hello Angga,</br><span>todays weather:</span></h2>
-          `)
+          // $(".dashboard-greeting").empty();
+          // $(".dashboard-greeting").prepend(`
+          //   <h3 id="dashboard-greeting">Hello ${localStorage.fullName},</br><span>todays weather:</span></h3>
+          // `);
           getNews(response.articlesData);
           getCovid19(response.dataCovid);
           getWeather(response.weather);
         })
         .fail((err) => {
-          console.log(err);
+          $("#fail-condition").text(err).show();
+          $("#dashboard-area").hide();
+          $("#navbar-login").hide();
+          $("#navbar-register").hide();
+          $("#login-area").hide();
+          $("#register-area").hide();
         });
     });
   } else {
-    console.log("sorry weather data is not available");
+    $("#fail-condition").text("sorry weather data is not available")
   }
 }
 
@@ -189,7 +195,6 @@ const handleLogin = (email, password) => {
       $("#dashboard-area").show();
     })
     .fail((err) => {
-      console.log(err);
       $("div.center form .login-error-message").empty();
       err.responseJSON.messages.forEach((errMessage) => {
         $("div.center form .login-error-message").append(`
@@ -233,6 +238,7 @@ const handleRegister = (firstName, lastName, email, password) => {
   })
     .done((response) => {
       $("#login-area").show();
+      $("#register-area").hide();
       $("#succes-register").text("Account succesfully created");
     })
     .fail((err) => {
@@ -291,11 +297,6 @@ $("#navbar-login").click((event) => {
 
 // HANDLE AUTH
 function onSignIn(googleUser) {
-  // var profile = googleUser.getBasicProfile();
-  // console.log("ID: " + profile.getId()); // Do not send to your backend! Use an ID token instead.
-  // console.log("Name: " + profile.getName());
-  // console.log("Image URL: " + profile.getImageUrl());
-  // console.log("Email: " + profile.getEmail()); // This is null if the 'email' scope is not present.
   var id_token = googleUser.getAuthResponse().id_token;
 
   $.ajax({
@@ -326,7 +327,7 @@ function onSignIn(googleUser) {
 function signOut() {
   var auth2 = gapi.auth2.getAuthInstance();
   auth2.signOut().then(function () {
-    console.log("User signed out.");
+    // console.log("User signed out.");
   });
 }
 // END HANDLE AUTH
