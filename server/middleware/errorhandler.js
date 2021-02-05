@@ -24,7 +24,21 @@ const errorHandler = (error, req, res, next) => {
             errorMessage = error.message
             errorCode = error.code
             res.status(errorCode).json({
-                message: errorMessage
+                messages: [errorMessage]
+            })
+            break;
+
+        case 'Many custom error':
+            errorMessage = error.message
+            errorCode = error.code
+            res.status(errorCode).json({
+                messages: errorMessage
+            })
+            break;
+
+        default:
+            res.status(500).json({
+                messages: ["internal server error"]
             })
             
     }

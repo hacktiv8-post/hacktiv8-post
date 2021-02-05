@@ -32,6 +32,14 @@ class Controller {
             }
         })
             .then(user => {
+                const errors = [];
+                if(!email) {
+                    errors.push('please insert email')
+                }
+                if(!password) {
+                    errors.push('please insert password')
+                }
+                if(errors.length !== 0) { throw { name: 'Many Custom error', message: errors, code: 400 } }
 
                 if (!user || !checkPassword(password, user.password)) {
                     throw { name: 'Custom error', message: 'invalid email or password', code: 400 }
@@ -51,7 +59,6 @@ class Controller {
     }
 
     static dashboard(req, res, next) {
-
         let articlesData = []
         let weather = {}
         let country = "id"
@@ -74,6 +81,7 @@ class Controller {
                     return { source, title, description, url, urlToImage, publishedAt }
                 })
 
+                console.log(articlesData)
                 return axios.get(weatherStackUrl)
             })
             .then(response => {
@@ -82,7 +90,6 @@ class Controller {
                 const weather_icons = weatherInfos.current.weather_icons
                 const weather_descriptions = weatherInfos.current.weather_descriptions
                 weather = { temperature, weather_icons, weather_descriptions }
-                console.log(weather)
                 return axios({
                     method: "get",
                     url: `https://api.covid19api.com/live/country/indonesia`
@@ -104,7 +111,7 @@ class Controller {
                 res.status(200).json({ articlesData, weather, dataCovid: data })
             })
             .catch(err => {
-                res.status(401).json(err)
+                next(err)
             })
 
     }

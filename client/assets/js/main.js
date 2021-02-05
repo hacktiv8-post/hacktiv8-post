@@ -3,10 +3,101 @@ const serverUrl = `http://localhost:8000/`;
 // ================ HANDLE LOGIN ================
 
 $(document).ready(() => {
-  // $("#register-area").hide();
-  // $("#login-area").hide();
   auth();
 });
+
+// HANDLE AUTH
+const auth = () => {
+  if (localStorage.access_token) {
+    $("#login-area").hide();
+    $("#register-area").hide();
+
+    // NAVBAR
+    $("#navbar-home").show();
+    $("#navbar-logout").show();
+    $("#navbar-login").hide();
+    $("#navbar-register").hide();
+    $("#dashboard-area").show();
+    getDashboard();
+  } else {
+    // $("#login-area").show();
+    //NAVBAR
+    $("#navbar-home").hide();
+    $("#navbar-logout").hide();
+    $("#register-area").hide();
+    $("#dashboard-area").hide();
+    $("#navbar-login").show();
+    $("#navbar-register").show();
+    $("#login-area").show();
+  }
+};
+
+//FETCH DATA IN DASHBOARD FROM DB
+
+function getDashboard() {
+  let latitude, longitude;
+  if(navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(position => {
+      latitude = position.coords.latitude;
+      longitude = position.coords.longitude;
+      $.ajax({
+        url: serverUrl + "dashboard",
+        method: "POST",
+        headers: { access_token: localStorage.access_token },
+        data: {
+          latitude,
+          longitude
+        }
+      })
+        .done(response => {
+          getWeather();
+          getNews(response.articlesData);
+          getCovid19(response.dataCovid);
+        })
+        .fail(err => {
+          console.log(err)
+        })
+    });
+  } else {
+    console.log("sorry weather data is not available")
+  }
+}
+
+function getWeather() {
+  
+}
+
+function getCovid19(dataCovid) {
+  let { country, confirmed, deaths, recovered, active, date } = dataCovid;
+  $("#covid19-area").append(`
+  <div class="card-covid19">
+    <h1>${country}</h1>
+    <p>confirmed: ${confirmed}</p>
+    <p>deaths: ${deaths}</p>
+    <p>recovered: ${recovered}</p>
+    <p>active: ${active}</p>
+    <p>date: ${date}</p>
+  </div>
+  `)
+}
+
+function getNews(news) {
+  news.forEach(article => {
+    $("#news-area .cards").append(`
+    <div class="card">
+      <img src="${article.urlToImage}">
+      <div class="detail">
+        <h5><a href="${article.url}" target="_blank" style="text-decoration: none;">${article.title}</a></h5>
+        <p>${article.description.slice(0, 100)} . . .</p>
+        <p>by ${article.source} at ${new Date(article.publishedAt).toUTCString()}</p>
+      </div>
+    </div>
+    `)
+  })
+}
+
+
+//END HANDLE AUTH
 
 $("#btn-login").click((event) => {
   event.preventDefault();
@@ -25,9 +116,15 @@ const handleLogin = (email, password) => {
     .done((response) => {
       localStorage.setItem("access_token", response.access_token);
       auth();
+      $("#dashboard-area").show();
     })
-    .fail((error) => {
-      $("#error-login").text(error.responseJSON.error);
+    .fail((err) => {
+      $("div.center form .login-error-message").empty();
+      err.responseJSON.messages.forEach(errMessage => {
+        $("div.center form .login-error-message").append(`
+            <p id="error-register" style="margin: -5px 0; color: red;">${errMessage}</p>
+        `);
+      })
     })
     .always((_) => {
       $("#login-email").val("");
@@ -63,10 +160,16 @@ const handleRegister = (firstName, lastName, email, password) => {
     data: { firstName, lastName, email, password },
   })
     .done((response) => {
+      $("#login-area").show();
       $("#succes-register").text("Account succesfully created");
     })
     .fail((err) => {
-      $("#error-register").text(err.responseJSON.error);
+      $("div.center form .register-error-message").empty();
+      err.responseJSON.messages.forEach(errMessage => {
+        $("div.center form .register-error-message").prepend(`
+            <p id="error-register" style="margin: -5px 0; color: red;">${errMessage}</p>
+        `);
+      })
     })
     .always((_) => {
       $("#register-first-name").val("");
@@ -88,28 +191,7 @@ $("#btn-login-inregister").click((event) => {
 
 //  ================ END HANDLE REGISTER ================
 
-// HANDLE AUTH
-const auth = () => {
-  if (localStorage.access_token) {
-    $("#login-area").hide();
-    $("#register-area").hide();
 
-    // NAVBAR
-    $("#navbar-home").show();
-    $("#navbar-logout").show();
-    $("#navbar-login").hide();
-    $("#navbar-register").hide();
-  } else {
-    // $("#login-area").show();
-    //NAVBAR
-    $("#navbar-home").hide();
-    $("#navbar-logout").hide();
-    $("#navbar-login").show();
-    $("#navbar-register").show();
-  }
-};
-
-//END HANDLE AUTH
 
 // HANDLE NAVBAR
 $("#navbar-logout").click((event) => {
