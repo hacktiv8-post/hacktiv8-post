@@ -37,7 +37,7 @@ form .txt_field-register {
 
 .txt_field-register label {
   position: absolute;
-  top: 50%;
+  top: -8px;
   left: 5px;
   color: #534343;
   transform: translateY(-50%);
@@ -46,7 +46,7 @@ form .txt_field-register {
   transition: 0.5s;
 }
 
-.txt_field-register span::before {
+/* .txt_field-register span::before {
   content: '';
   position: absolute;
   top: 40%;
@@ -55,16 +55,22 @@ form .txt_field-register {
   height: 2px;
   background: red;
   transition: 0.5s;
-}
+} */
 
 .txt_field-register input:focus ~label {
-  top: -5px;
   color: #2691d9;
 }
 
-.txt_field-register input:focus ~ span::before {
+
+/* .txt_field-register input:nth-child(1):valid ~label,
+.txt_field-register input:nth-child(3):valid ~label,
+.txt_field-register input:nth-child(4):valid ~label {
+  color: #2691d9;
+} */
+
+/* .txt_field-register input:focus ~ span::before {
   width: 100%;
-}
+} */
 
 #btn-register {
   width: 100%;

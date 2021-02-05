@@ -8,7 +8,7 @@ router.post('/login', Controller.login)
 router.use(authenticate)
 
 
-router.get('/dashboard', Controller.dashboard)
+router.post('/dashboard', Controller.dashboard)
 
 
 module.exports = router
