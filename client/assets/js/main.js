@@ -122,6 +122,7 @@ const handleLogin = (email, password) => {
       $("#dashboard-area").show();
     })
     .fail((err) => {
+      console.log(err);
       $("div.center form .login-error-message").empty();
       err.responseJSON.messages.forEach((errMessage) => {
         $("div.center form .login-error-message").append(`
@@ -141,6 +142,7 @@ $("#btn-register-inlogin").click((event) => {
   $("#login-password").val("");
   $("#register-area").show();
   $("#login-area").hide();
+  $("div.center form .login-error-message").empty();
 });
 
 // ============ END HANDLE LOGIN ================
