@@ -80,16 +80,23 @@ class Controller {
                     const publishedAt = e.publishedAt
                     return { source, title, description, url, urlToImage, publishedAt }
                 })
-
-                console.log(articlesData)
                 return axios.get(weatherStackUrl)
             })
             .then(response => {
                 let weatherInfos = response.data
-                const temperature = weatherInfos.current.temperature
-                const weather_icons = weatherInfos.current.weather_icons
-                const weather_descriptions = weatherInfos.current.weather_descriptions
-                weather = { temperature, weather_icons, weather_descriptions }
+                const { temperature, weather_icons, weather_descriptions, pressure, humidity, cloudcover, uv_index } = weatherInfos.current
+                const { region, localtime } = weatherInfos.location;
+                weather = {
+                    temperature,
+                    weather_icons,
+                    weather_descriptions,
+                    region,
+                    cloudcover,
+                    pressure,
+                    localtime,
+                    humidity,
+                    uv_index
+                }
                 return axios({
                     method: "get",
                     url: `https://api.covid19api.com/live/country/indonesia`

@@ -1,4 +1,4 @@
-const serverUrl = `http://localhost:8000/`;
+const serverUrl = `http://localhost:4000/`;
 
 // ================ HANDLE LOGIN ================
 
@@ -50,9 +50,12 @@ function getDashboard() {
         }
       })
         .done(response => {
-          getWeather();
+          $("#dashboard-container aside").prepend(`
+            <h2 id="dashboard-greeting">Hello Angga,</br><span>todays weather:</span></h2>
+          `)
           getNews(response.articlesData);
           getCovid19(response.dataCovid);
+          getWeather(response.weather);
         })
         .fail(err => {
           console.log(err)
@@ -63,33 +66,99 @@ function getDashboard() {
   }
 }
 
-function getWeather() {
-  
+function getWeather(weather) {
+  let {
+    temperature,
+    weather_icons,
+    weather_descriptions,
+    region,
+    cloudcover,
+    pressure,
+    localtime,
+    humidity,
+    uv_index
+  } = weather;
+  [weather_icons] = weather_icons;
+  [weather_descriptions] = weather_descriptions;
+
+  let time = localtime.slice(localtime.length-5, localtime.length);
+  let date = new Date(localtime).toUTCString()
+  date = date.slice(0, date.length-13)
+  let dateTime = `${date} ${time}`
+
+  $("#weather-area").empty();
+  $("#weather-area").append(`
+  <div class="weather-card">
+    <div class="weather-card-header">
+      <img src="${weather_icons}" alt="icon">
+      <div id="weather-region">
+        <h4 id="weather-location">${region}</h4>
+        <div>${dateTime}</div>
+      </div>
+    </div>
+    <h1 id="weather-temperature">${temperature}&deg;</h1>
+    <div id="weather-detail">
+      <div id="weather-detail1">
+        <div id="weather-cloudcover">
+          <h6>Cloudcover</h6>
+          <h6>${cloudcover}</h6>
+        </div>
+        <div id="weather-pressure">
+          <h6>Pressure</h6>
+          <h6>${pressure}</h6>
+        </div>
+      </div>
+      <div id="weather-detail2">
+        <div id="weather-humidity">
+          <h6>Humidity</h6>
+          <h6>${humidity}</h6>
+        </div>
+        <div id="weather-uv_index">
+          <h6>UV Index</h6>
+          <h6>${uv_index}</h6>
+        </div>
+      </div>
+    </div>
+  </div>
+  `)
 }
 
 function getCovid19(dataCovid) {
   let { country, confirmed, deaths, recovered, active, date } = dataCovid;
+  let dateParsed = new Date(date).toUTCString()
+  dateParsed = dateParsed.slice(0, dateParsed.length-13);
+
+  $("#covid19-area").empty();
   $("#covid19-area").append(`
   <div class="card-covid19">
-    <h1>${country}</h1>
-    <p>confirmed: ${confirmed}</p>
-    <p>deaths: ${deaths}</p>
-    <p>recovered: ${recovered}</p>
-    <p>active: ${active}</p>
-    <p>date: ${date}</p>
+    <h2>Covid19 Info</h2>
+    <p style="text-align: center;">in ${country}</p>
+    <p>Confirmed: <span>${confirmed}</span></p>
+    <p>Deaths: <span>${deaths}</span></p>
+    <p>Recovered: <span>${recovered}</span></p>
+    <p>Active: <span>${active}</span></p>
+    <p>Updated: <span>${dateParsed}</span></p>
   </div>
   `)
 }
 
 function getNews(news) {
   news.forEach(article => {
+    let publishedAt = new Date(article.publishedAt).toUTCString()
+    publishedAt = publishedAt.slice(0, publishedAt.length - 4);
+    let articleDescription;
+    if(article.description.length < 170) {
+      articleDescription = article.description;
+    } else {
+      articleDescription = article.description.slice(0, 170) + " . . . .";
+    }
     $("#news-area .cards").append(`
     <div class="card">
       <img src="${article.urlToImage}">
       <div class="detail">
         <h5><a href="${article.url}" target="_blank" style="text-decoration: none;">${article.title}</a></h5>
-        <p>${article.description.slice(0, 100)} . . .</p>
-        <p>by ${article.source} at ${new Date(article.publishedAt).toUTCString()}</p>
+        <p>${articleDescription}</p>
+        <p>by <strong>${article.source}</strong> at ${publishedAt} WIB</p>
       </div>
     </div>
     `)

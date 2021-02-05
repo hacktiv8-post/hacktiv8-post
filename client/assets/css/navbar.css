@@ -3,3 +3,10 @@
   justify-content: space-around;
   width: 30%;
 }
+
+#navbar-login:hover,
+#navbar-register:hover,
+#navbar-logout:hover {
+  color: rgb(163, 129, 129);
+  cursor: pointer;
+}
