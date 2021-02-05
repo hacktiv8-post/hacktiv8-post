@@ -192,6 +192,7 @@ $("#btn-login-inregister").click((event) => {
   $("#register-password").val("");
   $("#register-area").hide();
   $("#login-area").show();
+  $("div.center form .register-error-message").empty();
 });
 
 //  ================ END HANDLE REGISTER ================
@@ -208,6 +209,7 @@ $("#navbar-register").click((event) => {
   $("#register-area").show();
   $("#login-area").hide();
   $("#dashboard-area").hide();
+  $("div.center form .login-error-message").empty();
 });
 
 $("#navbar-login").click((event) => {
@@ -215,6 +217,7 @@ $("#navbar-login").click((event) => {
   $("#register-area").hide();
   $("#login-area").show();
   $("#dashboard-area").hide();
+  $("div.center form .register-error-message").empty();
 });
 
 // END HANDLE NAVBAR

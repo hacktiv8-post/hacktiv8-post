@@ -7,6 +7,7 @@ const { OAuth2Client } = require("google-auth-library");
 class Controller {
   static register(req, res, next) {
     const { firstName, lastName, email, password } = req.body;
+    // let errors = [];
 
     User.create({
       firstName,
@@ -21,7 +22,21 @@ class Controller {
         });
       })
       .catch((err) => {
-        next(err);
+        let errorNotEmpty = [];
+        let errorValidation = [];
+        err.errors.forEach((el) => {
+          if (el.validatorKey === "notEmpty") {
+            errorNotEmpty.push(el);
+          } else {
+            errorValidation.push(el);
+          }
+        });
+        if (errorNotEmpty.length > 0) {
+          err.errors = errorNotEmpty;
+          next(err);
+        } else {
+          next(err);
+        }
       });
   }
 
@@ -41,7 +56,7 @@ class Controller {
           errors.push("please insert password");
         }
         if (errors.length !== 0) {
-          throw { name: "Many Custom error", message: errors, code: 400 };
+          throw { name: "Many custom error", message: errors, code: 400 };
         }
 
         if (!user || !checkPassword(password, user.password)) {
@@ -162,7 +177,6 @@ class Controller {
         res.status(201).json({ access_token, fullName });
       }
     } catch (err) {
-      console.log(err);
       next(err);
     }
   }
