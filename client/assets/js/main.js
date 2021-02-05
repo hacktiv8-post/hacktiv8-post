@@ -36,8 +36,8 @@ const auth = () => {
 
 function getDashboard() {
   let latitude, longitude;
-  if(navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(position => {
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition((position) => {
       latitude = position.coords.latitude;
       longitude = position.coords.longitude;
       $.ajax({
@@ -46,8 +46,8 @@ function getDashboard() {
         headers: { access_token: localStorage.access_token },
         data: {
           latitude,
-          longitude
-        }
+          longitude,
+        },
       })
         .done(response => {
           $("#dashboard-container aside").prepend(`
@@ -57,12 +57,12 @@ function getDashboard() {
           getCovid19(response.dataCovid);
           getWeather(response.weather);
         })
-        .fail(err => {
-          console.log(err)
-        })
+        .fail((err) => {
+          console.log(err);
+        });
     });
   } else {
-    console.log("sorry weather data is not available")
+    console.log("sorry weather data is not available");
   }
 }
 
@@ -139,10 +139,11 @@ function getCovid19(dataCovid) {
     <p>Active: <span>${active}</span></p>
     <p>Updated: <span>${dateParsed}</span></p>
   </div>
-  `)
+  `);
 }
 
 function getNews(news) {
+
   news.forEach(article => {
     let publishedAt = new Date(article.publishedAt).toUTCString()
     publishedAt = publishedAt.slice(0, publishedAt.length - 4);
@@ -156,15 +157,15 @@ function getNews(news) {
     <div class="card">
       <img src="${article.urlToImage}">
       <div class="detail">
+
         <h5><a href="${article.url}" target="_blank" style="text-decoration: none;">${article.title}</a></h5>
         <p>${articleDescription}</p>
         <p>by <strong>${article.source}</strong> at ${publishedAt} WIB</p>
       </div>
     </div>
-    `)
-  })
+    `);
+  });
 }
-
 
 //END HANDLE AUTH
 
@@ -188,12 +189,13 @@ const handleLogin = (email, password) => {
       $("#dashboard-area").show();
     })
     .fail((err) => {
+      console.log(err);
       $("div.center form .login-error-message").empty();
-      err.responseJSON.messages.forEach(errMessage => {
+      err.responseJSON.messages.forEach((errMessage) => {
         $("div.center form .login-error-message").append(`
             <p id="error-register" style="margin: -5px 0; color: red;">${errMessage}</p>
         `);
-      })
+      });
     })
     .always((_) => {
       $("#login-email").val("");
@@ -207,6 +209,7 @@ $("#btn-register-inlogin").click((event) => {
   $("#login-password").val("");
   $("#register-area").show();
   $("#login-area").hide();
+  $("div.center form .login-error-message").empty();
 });
 
 // ============ END HANDLE LOGIN ================
@@ -234,11 +237,11 @@ const handleRegister = (firstName, lastName, email, password) => {
     })
     .fail((err) => {
       $("div.center form .register-error-message").empty();
-      err.responseJSON.messages.forEach(errMessage => {
+      err.responseJSON.messages.forEach((errMessage) => {
         $("div.center form .register-error-message").prepend(`
             <p id="error-register" style="margin: -5px 0; color: red;">${errMessage}</p>
         `);
-      })
+      });
     })
     .always((_) => {
       $("#register-first-name").val("");
@@ -256,11 +259,10 @@ $("#btn-login-inregister").click((event) => {
   $("#register-password").val("");
   $("#register-area").hide();
   $("#login-area").show();
+  $("div.center form .register-error-message").empty();
 });
 
 //  ================ END HANDLE REGISTER ================
-
-
 
 // HANDLE NAVBAR
 $("#navbar-logout").click((event) => {
@@ -274,6 +276,7 @@ $("#navbar-register").click((event) => {
   $("#register-area").show();
   $("#login-area").hide();
   $("#dashboard-area").hide();
+  $("div.center form .login-error-message").empty();
 });
 
 $("#navbar-login").click((event) => {
@@ -281,8 +284,49 @@ $("#navbar-login").click((event) => {
   $("#register-area").hide();
   $("#login-area").show();
   $("#dashboard-area").hide();
+  $("div.center form .register-error-message").empty();
 });
 
 // END HANDLE NAVBAR
 
+// HANDLE AUTH
+function onSignIn(googleUser) {
+  // var profile = googleUser.getBasicProfile();
+  // console.log("ID: " + profile.getId()); // Do not send to your backend! Use an ID token instead.
+  // console.log("Name: " + profile.getName());
+  // console.log("Image URL: " + profile.getImageUrl());
+  // console.log("Email: " + profile.getEmail()); // This is null if the 'email' scope is not present.
+  var id_token = googleUser.getAuthResponse().id_token;
 
+  $.ajax({
+    url: `${serverUrl}google-login`,
+    method: "POST",
+    data: { id_token },
+  })
+    .done((response) => {
+      localStorage.setItem("access_token", response.access_token);
+      localStorage.setItem("fullName", response.fullName);
+      auth();
+      $("#dashboard-area").show();
+    })
+    .fail((err) => {
+      $("div.center form .login-error-message").empty();
+      err.responseJSON.messages.forEach((errMessage) => {
+        $("div.center form .login-error-message").append(`
+            <p id="error-register" style="margin: -5px 0; color: red;">${errMessage}</p>
+        `);
+      });
+    })
+    .always((_) => {
+      $("#login-email").val("");
+      $("#login-password").val("");
+    });
+}
+
+function signOut() {
+  var auth2 = gapi.auth2.getAuthInstance();
+  auth2.signOut().then(function () {
+    console.log("User signed out.");
+  });
+}
+// END HANDLE AUTH
