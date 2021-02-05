@@ -36,8 +36,8 @@ const auth = () => {
 
 function getDashboard() {
   let latitude, longitude;
-  if(navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(position => {
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition((position) => {
       latitude = position.coords.latitude;
       longitude = position.coords.longitude;
       $.ajax({
@@ -46,26 +46,24 @@ function getDashboard() {
         headers: { access_token: localStorage.access_token },
         data: {
           latitude,
-          longitude
-        }
+          longitude,
+        },
       })
-        .done(response => {
+        .done((response) => {
           getWeather();
           getNews(response.articlesData);
           getCovid19(response.dataCovid);
         })
-        .fail(err => {
-          console.log(err)
-        })
+        .fail((err) => {
+          console.log(err);
+        });
     });
   } else {
-    console.log("sorry weather data is not available")
+    console.log("sorry weather data is not available");
   }
 }
 
-function getWeather() {
-  
-}
+function getWeather() {}
 
 function getCovid19(dataCovid) {
   let { country, confirmed, deaths, recovered, active, date } = dataCovid;
@@ -78,24 +76,29 @@ function getCovid19(dataCovid) {
     <p>active: ${active}</p>
     <p>date: ${date}</p>
   </div>
-  `)
+  `);
 }
 
 function getNews(news) {
-  news.forEach(article => {
+  news.forEach((article) => {
     $("#news-area .cards").append(`
     <div class="card">
       <img src="${article.urlToImage}">
       <div class="detail">
-        <h5><a href="${article.url}" target="_blank" style="text-decoration: none;">${article.title}</a></h5>
+        <h5><a href="${
+          article.url
+        }" target="_blank" style="text-decoration: none;">${
+      article.title
+    }</a></h5>
         <p>${article.description.slice(0, 100)} . . .</p>
-        <p>by ${article.source} at ${new Date(article.publishedAt).toUTCString()}</p>
+        <p>by ${article.source} at ${new Date(
+      article.publishedAt
+    ).toUTCString()}</p>
       </div>
     </div>
-    `)
-  })
+    `);
+  });
 }
-
 
 //END HANDLE AUTH
 
@@ -120,11 +123,11 @@ const handleLogin = (email, password) => {
     })
     .fail((err) => {
       $("div.center form .login-error-message").empty();
-      err.responseJSON.messages.forEach(errMessage => {
+      err.responseJSON.messages.forEach((errMessage) => {
         $("div.center form .login-error-message").append(`
             <p id="error-register" style="margin: -5px 0; color: red;">${errMessage}</p>
         `);
-      })
+      });
     })
     .always((_) => {
       $("#login-email").val("");
@@ -165,11 +168,11 @@ const handleRegister = (firstName, lastName, email, password) => {
     })
     .fail((err) => {
       $("div.center form .register-error-message").empty();
-      err.responseJSON.messages.forEach(errMessage => {
+      err.responseJSON.messages.forEach((errMessage) => {
         $("div.center form .register-error-message").prepend(`
             <p id="error-register" style="margin: -5px 0; color: red;">${errMessage}</p>
         `);
-      })
+      });
     })
     .always((_) => {
       $("#register-first-name").val("");
@@ -190,8 +193,6 @@ $("#btn-login-inregister").click((event) => {
 });
 
 //  ================ END HANDLE REGISTER ================
-
-
 
 // HANDLE NAVBAR
 $("#navbar-logout").click((event) => {
@@ -216,4 +217,37 @@ $("#navbar-login").click((event) => {
 
 // END HANDLE NAVBAR
 
+// HANDLE AUTH
+function onSignIn(googleUser) {
+  // var profile = googleUser.getBasicProfile();
+  // console.log("ID: " + profile.getId()); // Do not send to your backend! Use an ID token instead.
+  // console.log("Name: " + profile.getName());
+  // console.log("Image URL: " + profile.getImageUrl());
+  // console.log("Email: " + profile.getEmail()); // This is null if the 'email' scope is not present.
+  var id_token = googleUser.getAuthResponse().id_token;
 
+  $.ajax({
+    url: `${serverUrl}google-login`,
+    method: "POST",
+    data: { id_token },
+  })
+    .done((response) => {
+      localStorage.setItem("access_token", response.access_token);
+      localStorage.setItem("fullName", response.fullName);
+      auth();
+      $("#dashboard-area").show();
+    })
+    .fail((err) => {
+      $("div.center form .login-error-message").empty();
+      err.responseJSON.messages.forEach((errMessage) => {
+        $("div.center form .login-error-message").append(`
+            <p id="error-register" style="margin: -5px 0; color: red;">${errMessage}</p>
+        `);
+      });
+    })
+    .always((_) => {
+      $("#login-email").val("");
+      $("#login-password").val("");
+    });
+}
+// END HANDLE AUTH
