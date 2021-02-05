@@ -7,7 +7,11 @@
 }
 
 .center {
-  background:rgba(66, 124, 114, 0.3);
+  background: linear-gradient(
+    to right top,
+    rgba(255, 255, 255, 0.8),
+    rgba(255, 255, 255, 0.5)
+  );
   width: 25rem;
   border-radius: 7px;
   padding: 20px;
@@ -47,34 +51,9 @@ form .txt_field {
 }
 
 .txt_field input:focus ~label {
-  /* top: -5px; */
   color: #2691d9;
 }
 
-
-
-/* .txt_field span::before {
-  z-index: 1;
-  content: '';
-  position: absolute;
-  top: 40%;
-  left: 0;
-  width: 100%;
-  height: 2px;
-  background: red;
-  transition: 0.5s;
-} */
-
-/* .txt_field input:focus ~label,
-.txt_field input:valid ~label {
-  top: -5px;
-  color: #2691d9;
-} */
-
-/* .txt_field input:focus ~ span::before,
-.txt_field input:valid ~ span::before {
-  width: 100%;
-} */
 
 #btn-login {
   width: 100%;
